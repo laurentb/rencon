@@ -28,8 +28,11 @@ if __name__ == "__main__":
             ext = os.path.splitext(f)[1][1:]
             name = mask.substitute(hash=h, ext=ext)
             dest = os.path.join(os.path.dirname(f), name)
-            print "`%s' -> `%s'" % (f, dest)
-            if os.path.exists(dest):
-                print >>sys.stderr, 'Destination %s already exists.' % dest
-            elif not args.pretend:
-                os.rename(f, dest)
+            if os.path.basename(f) == name:
+                print 'OK %s' % name
+            else:
+                print "`%s' -> `%s'" % (f, dest)
+                if os.path.exists(dest):
+                    print >>sys.stderr, 'Destination %s already exists.' % dest
+                elif not args.pretend:
+                    os.rename(f, dest)
