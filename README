@@ -1,0 +1,14 @@
+rencon is a simple, safe tool able to rename files based on their content.
+
+Example usage:
+    rencon -m 'r_${hash}.${ext}' *.jpg
+
+It will rename all .jpg files with a hash based on their content, and add "r_"
+to distinguish them.
+
+The default mask is ${hash}.${ext}. The hash used is SHA1.
+
+For more information, run rencon -h.
+
+It does not erase existing files.
+While it can be used in that way it does not aim to do file deduplication.
