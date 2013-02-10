@@ -10,11 +10,11 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Rename files based on content.')
 
     parser.add_argument('files', metavar='FILE', type=str, nargs='+',
-                       help='Files to rename')
+                        help='Files to rename')
     parser.add_argument('-m', '--mask', nargs='?',
-                       help='File destination mask', default='${hash}.${ext}')
+                        help='File destination mask', default='${hash}.${ext}')
     parser.add_argument('-p', '--pretend', action='store_true',
-                       help='Do not rename, just print')
+                        help='Do not rename, just print')
 
     args = parser.parse_args()
     print 'Renaming with mask: %s' % args.mask
