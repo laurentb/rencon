@@ -8,14 +8,23 @@ import sys
 from string import Template
 
 
+def hashfile(hasher, fp, bs=2**16):
+    h = hasher()
+    buf = fp.read(bs)
+    while len(buf):
+        h.update(buf)
+        buf = fp.read(bs)
+    return h
+
+
 def rename(fpath, mask, out=sys.stdout, err=sys.stderr):
     if not os.path.exists(fpath):
         print("File %s does not exists." % fpath, file=err)
     else:
         with open(fpath) as fp:
-            h = hashlib.sha1(fp.read()).hexdigest()
+            hsh = hashfile(hashlib.sha1, fp).hexdigest()
         ext = os.path.splitext(fpath)[1][1:]
-        name = mask.substitute(hash=h, ext=ext)
+        name = mask.substitute(hash=hsh, ext=ext)
         dest = os.path.join(os.path.dirname(fpath), name)
         if os.path.basename(fpath) == name:
             print("OK %s" % name, file=out)
