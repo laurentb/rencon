@@ -17,12 +17,14 @@ def hashfile(hasher, fp, bs=2**16):
     return h
 
 
-def rename(fpath, mask, out=sys.stdout, err=sys.stderr):
+def rename(fpath, mask, algorithm, out=sys.stdout, err=sys.stderr):
+    print("Renaming with mask: %s" % args.mask, file=out)
     if not os.path.exists(fpath):
         print("File %s does not exists." % fpath, file=err)
     else:
         with open(fpath) as fp:
-            hsh = hashfile(hashlib.sha1, fp).hexdigest()
+            hasher = getattr(hashlib, algorithm)
+            hsh = hashfile(hasher, fp).hexdigest()
         ext = os.path.splitext(fpath)[1][1:]
         name = mask.substitute(hash=hsh, ext=ext)
         dest = os.path.join(os.path.dirname(fpath), name)
@@ -47,9 +49,9 @@ if __name__ == '__main__':
                         help="file destination mask", default='${hash}.${ext}')
     parser.add_argument('-p', '--pretend', action='store_true',
                         help="do not rename, just print")
+    parser.add_argument('-a', '--algorithm',
+                        help="hash algorithm", choices=hashlib.algorithms, default='sha1')
 
     args = parser.parse_args()
-    print("Renaming with mask: %s" % args.mask)
-    mask = Template(args.mask)
     for fpath in args.files:
-        rename(fpath, mask)
+        rename(fpath, Template(args.mask), args.algorithm)
