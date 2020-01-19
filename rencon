@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse
@@ -22,7 +22,7 @@ def rename(fpath, mask, algorithm, abbrev=None, out=sys.stdout, err=sys.stderr):
     if not os.path.exists(fpath):
         print("File %s does not exists." % fpath, file=err)
     else:
-        with open(fpath) as fp:
+        with open(fpath, 'rb') as fp:
             hasher = getattr(hashlib, algorithm)
             hsh = hashfile(hasher, fp).hexdigest()
             if abbrev:
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--pretend', action='store_true',
                         help="do not rename, just print")
     parser.add_argument('-a', '--algorithm',
-                        help="hash algorithm", choices=hashlib.algorithms, default='sha1')
+                        help="hash algorithm", choices=hashlib.algorithms_available, default='sha1')
     parser.add_argument('-b', '--abbrev', metavar='N', type=abbrev,
                         help="use the first N digits", default=None)
 
